@@ -3,9 +3,10 @@ type = "webpack"
 
 account_id = "a1e6a6f6119ab3e2a9f55b3b7d2ca8a1"
 workers_dev = true
-route = "https://captcha-cloudflare.kurd.cc"
-zone_id = "54b7e197da420320ea5f44834c495b1b"
+route = ""
+zone_id = ""
 
 kv_namespaces = [
-         { binding = "CAPTCHA_KV",preview_id = "27f1742263934bddb3b8dcb35198354c", id = "2c1b7211c26c495caaf9410edf9ea1e1" }
+         { binding = "CAPTCHA_KV",preview_id = "27f1742263934bddb3b8dcb35198354c", id = "2c1b7211c26c495caaf9410edf9ea1e1" },
+         { binding = "FAILS_KV", preview_id = "00c3dda9efaa468cbd48cac3f60d094b",  id = "faab0abf018944b29addf15147891053" }
 ]

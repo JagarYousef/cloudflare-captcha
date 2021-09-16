@@ -1,4 +1,4 @@
-const FailedView = () => {
+const FailedView = (message) => {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +15,8 @@ const FailedView = () => {
 
 <div class="container d-flex justify-content-center mt-3">
     <div class='text-white bg-danger row col-12 col-md-8 card mt-3 d-flex justify-content-center'>
-    <h5>Your entered captcha was NOT correct</h5>
+    <h5>Your entered captcha was NOT correct</h5> <br />
+    <h6>${message}</h6>
 </div>
 </div>
 

@@ -1,23 +1,37 @@
 import CaptchaView from "./CaptchaView.js";
 import SuccessView from './SuccessView'
 import FailedView from './FailedView'
-import aes256 from 'aes256'
+import {encrypt} from './Cryptor'
+
 addEventListener('fetch', event => {
 
   event.respondWith(handleRequest(event.request))
 })
 
 
+async function increaseFailureTimes(ip) {
+  const currentTimes = await FAILS_KV.get(ip)
+  if (currentTimes === null){
+    await FAILS_KV.put(ip, 1)
+  }else{
+    await FAILS_KV.put(ip, parseInt(currentTimes) + 1)
+  }
 
+}
+
+async function getFailureTimes(ip) {
+  return await FAILS_KV.get(ip)
+}
 
 /**
  * Respond with hello worker text
  * @param {Request} request
  */
 async function handleRequest(request) {
-  console.log(request.url)
-  if (request.url.endsWith("check")){
+
+  if (request.url.includes("check")){
     const data = await request.formData()
+    console.log(data)
     const enteredCaptcha = data.get("enteredCaptcha")
     const uid = data.get("uid")
 
@@ -33,8 +47,11 @@ async function handleRequest(request) {
     return new Response(SuccessView(decodeURI(request.url.split("?")[1])), {
       headers: { 'content-type': 'text/html' },
     })
-  }else if (request.url.endsWith("failed")){
-    return new Response(FailedView(), {
+  }else if (request.url.includes("failed")){
+    await increaseFailureTimes(request.headers.get("cf-connecting-ip"))
+    const message = await getFailureTimes(request.headers.get("cf-connecting-ip")) + " failures from this IP: " + request.headers.get("cf-connecting-ip")
+
+    return new Response(FailedView(message), {
       headers: { 'content-type': 'text/html' },
     })
   }else{
@@ -53,7 +70,7 @@ async function handleRequest(request) {
 }
 
 async function generateCaptchaToken(uid, enteredCaptcha) {
-  const token = await aes256.encrypt(uid, uid+enteredCaptcha)
+  const token = await encrypt(uid, uid+enteredCaptcha)
   return token
 }
 
