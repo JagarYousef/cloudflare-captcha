@@ -4,6 +4,7 @@ It uses pure JS with Cloudflare Workers and KV without any external packages.
 
 ### DEMO
 https://captcha-worker.cergo.workers.dev
+<br>
 ![Screenshot](https://user-images.githubusercontent.com/41321155/133565123-491bddbb-af19-40ed-bbe2-0e6e12fb352a.png)
 
 ### How does it work?
